@@ -5,15 +5,17 @@ pipeline {
         stage('Deploy to Apache') {
             steps {
                 sh '''
-                echo "Deploying HTML website..."
+                echo "Deploying HTML website to /var/www/html/dist ..."
 
-                sudo rm -rf /var/www/html/*
-                sudo cp -r dist/* /var/www/html/
+                # NEVER delete the dist directory itself
+                sudo rm -rf /var/www/html/dist/*
 
-                sudo chown -R apache:apache /var/www/html
-                sudo chmod -R 755 /var/www/html
+                # Copy build files
+                sudo cp -r dist/* /var/www/html/dist/
 
-                sudo systemctl restart httpd
+                # Permissions
+                sudo chown -R apache:apache /var/www/html/dist
+                sudo chmod -R 755 /var/www/html/dist
                 '''
             }
         }
