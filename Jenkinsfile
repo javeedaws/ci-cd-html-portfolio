@@ -5,6 +5,7 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
+                deleteDir()   // 🔥 FORCE CLEAN WORKSPACE
                 git branch: 'main',
                     url: 'https://github.com/javeedaws/ci-cd-html-portfolio.git'
             }
