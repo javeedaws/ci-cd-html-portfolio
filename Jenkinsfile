@@ -11,14 +11,13 @@ pipeline {
             }
         }
 
-        stage('Deploy index.html only') {
+        stage('Deploy to Apache') {
             steps {
                 sh '''
-                echo "Deploying index.html only..."
+                echo "Deploying website..."
 
-                sudo cp dist/index.html /var/www/html/index.html
-                sudo chown apache:apache /var/www/html/index.html
-                sudo chmod 644 /var/www/html/index.html
+                rm -rf /var/www/html/dist/*
+                cp -r dist/* /var/www/html/dist/
                 '''
             }
         }
@@ -26,7 +25,7 @@ pipeline {
 
     post {
         success {
-            echo '✅ index.html deployed successfully'
+            echo '✅ Deployment successful'
         }
         failure {
             echo '❌ Deployment failed'
