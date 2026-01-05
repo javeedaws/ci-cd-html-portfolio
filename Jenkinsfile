@@ -5,22 +5,20 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                deleteDir()   // 🔥 FORCE CLEAN WORKSPACE
+                deleteDir()
                 git branch: 'main',
                     url: 'https://github.com/javeedaws/ci-cd-html-portfolio.git'
             }
         }
 
-        stage('Deploy to Apache') {
+        stage('Deploy index.html only') {
             steps {
                 sh '''
-                echo "Deploying HTML website to /var/www/html/dist ..."
+                echo "Deploying index.html only..."
 
-                sudo rm -rf /var/www/html/dist/*
-                sudo cp -r dist/* /var/www/html/dist/
-
-                sudo chown -R apache:apache /var/www/html/dist
-                sudo chmod -R 755 /var/www/html/dist
+                sudo cp dist/index.html /var/www/html/index.html
+                sudo chown apache:apache /var/www/html/index.html
+                sudo chmod 644 /var/www/html/index.html
                 '''
             }
         }
@@ -28,7 +26,7 @@ pipeline {
 
     post {
         success {
-            echo '✅ Deployment successful'
+            echo '✅ index.html deployed successfully'
         }
         failure {
             echo '❌ Deployment failed'
